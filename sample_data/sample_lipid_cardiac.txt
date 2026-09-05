@@ -1,0 +1,26 @@
+================================================================================
+APEX CARDIOLOGY & LIPID CLINIC — AMBULATORY LAB REPORT
+Accreditation ID: CAP-551920 | CLIA: 11D0992318
+================================================================================
+PATIENT NAME: Marcus Sterling               AGE: 54         SEX: Male
+DOB: 1972-04-12                            PATIENT ID: MS-882194
+SPECIMEN COLLECTION DATE: 2026-08-20 07:45 AM
+ORDERING PHYSICIAN: Dr. Sarah Jenkins, MD, FACC
+PANEL ORDERED: Fasting Lipid Profile & High-Sensitivity C-Reactive Protein (hs-CRP)
+================================================================================
+
+TEST NAME                       RESULT   UNITS      REFERENCE RANGE    FLAGS
+--------------------------------------------------------------------------------
+Total Cholesterol               245      mg/dL      < 200              HIGH
+Triglycerides                   210      mg/dL      < 150              HIGH
+HDL Cholesterol                 38       mg/dL      > 40               LOW
+LDL Cholesterol (Calculated)    165      mg/dL      < 100              HIGH
+Non-HDL Cholesterol             207      mg/dL      < 130              HIGH
+Cholesterol / HDL Ratio         6.4                 < 5.0              HIGH
+hs-CRP (Cardiovascular Risk)    3.8      mg/L       < 1.0              HIGH
+TSH                             2.1      mIU/L      0.4 - 4.0          NORMAL
+
+OBSERVATIONS:
+- Patient completed 12-hour overnight fast prior to specimen venipuncture.
+- Lipid profile demonstrates combined hyperlipidemia pattern.
+================================================================================

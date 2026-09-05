@@ -1,0 +1,44 @@
+================================================================================
+METROPATH DIAGNOSTIC LABORATORIES — CLINICAL PATHOLOGY REPORT
+Accreditation ID: CAP-982144 | CLIA: 36D0891276
+================================================================================
+PATIENT NAME: Marcus Sterling               AGE: 54         SEX: Male
+DOB: 1972-04-12                            PATIENT ID: MS-882194
+SPECIMEN COLLECTION DATE: 2026-08-15 08:30 AM
+ORDERING PHYSICIAN: Dr. Robert Vance, MD
+PANEL ORDERED: Complete Blood Count (CBC) with Differential & Comprehensive Metabolic Panel (CMP)
+================================================================================
+
+TEST NAME                       RESULT   UNITS      REFERENCE RANGE    FLAGS
+--------------------------------------------------------------------------------
+COMPLETE BLOOD COUNT (CBC)
+Hemoglobin                      10.4     g/dL       13.5 - 17.5        LOW
+Hematocrit                      32.1     %          38.8 - 50.0        LOW
+White Blood Cell Count (WBC)    7.2      x10^3/uL   4.5 - 11.0         NORMAL
+Red Blood Cell Count (RBC)      3.9      x10^6/uL   4.3 - 5.9          LOW
+Platelets                       240      x10^3/uL   150 - 450          NORMAL
+MCV                             82.3     fL         80.0 - 100.0       NORMAL
+MCH                             26.6     pg         27.0 - 33.0        LOW
+MCHC                            32.4     g/dL       31.5 - 36.0        NORMAL
+RDW                             15.4     %          11.5 - 14.5        HIGH
+
+COMPREHENSIVE METABOLIC PANEL (CMP)
+Fasting Blood Glucose           158      mg/dL      70 - 99            HIGH
+Serum Creatinine                1.8      mg/dL      0.7 - 1.3          HIGH
+Blood Urea Nitrogen (BUN)       26       mg/dL      7 - 20             HIGH
+eGFR (Non-African American)     48       mL/min     > 60               LOW
+Sodium                          140      mmol/L     135 - 145          NORMAL
+Potassium                       4.4      mmol/L     3.5 - 5.1          NORMAL
+Chloride                        102      mmol/L     96 - 106           NORMAL
+Calcium                         9.2      mg/dL      8.5 - 10.5         NORMAL
+Total Protein                   7.0      g/dL       6.0 - 8.3          NORMAL
+Albumin                         4.1      g/dL       3.5 - 5.0          NORMAL
+Total Bilirubin                 0.8      mg/dL      0.2 - 1.2          NORMAL
+Alkaline Phosphatase (ALP)      74       U/L        44 - 147           NORMAL
+AST (SGOT)                      28       U/L        10 - 40            NORMAL
+ALT (SGPT)                      32       U/L        7 - 56             NORMAL
+
+OBSERVATIONS / PATHOLOGIST NOTES:
+- Normocytic normochromic anemia features noted on peripheral review.
+- Fasting status confirmed at time of draw.
+================================================================================
