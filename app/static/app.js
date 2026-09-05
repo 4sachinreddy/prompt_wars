@@ -1,4 +1,4 @@
-// MedLens Frontend Application Logic
+// MedLens Frontend Application Logic (Dark Mode)
 
 let currentRecord = {
   patient: null,
@@ -162,9 +162,9 @@ function setupEventListeners() {
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       document.querySelectorAll(".filter-btn").forEach(b => {
-        b.className = "filter-btn px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-600 hover:bg-slate-100";
+        b.className = "filter-btn px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700";
       });
-      e.target.className = "filter-btn px-2.5 py-1 rounded-md bg-slate-900 font-semibold text-white";
+      e.target.className = "filter-btn px-2.5 py-1 rounded-md bg-teal-500 font-bold text-slate-950";
       activeFilter = e.target.dataset.filter;
       renderLabTable();
     });
@@ -279,34 +279,34 @@ function renderInconsistencies() {
   conflictCountBadge.textContent = `${list.length} Discrepanc${list.length > 1 ? 'ies' : 'y'} Flagged`;
 
   conflictList.innerHTML = list.map(item => {
-    let badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
+    let badgeClass = "bg-amber-950/80 text-amber-300 border-amber-800";
     let iconName = "alert-triangle";
     if (item.severity === "CRITICAL") {
-      badgeClass = "bg-rose-100 text-rose-800 border-rose-300";
+      badgeClass = "bg-rose-950/80 text-rose-300 border-rose-800";
       iconName = "shield-alert";
     } else if (item.severity === "INFO") {
-      badgeClass = "bg-blue-100 text-blue-800 border-blue-300";
+      badgeClass = "bg-blue-950/80 text-blue-300 border-blue-800";
       iconName = "info";
     }
 
     return `
-      <div class="bg-white p-3.5 rounded-xl border border-amber-200/70 shadow-2xs space-y-2">
+      <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm space-y-2">
         <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2 font-bold text-xs text-slate-900">
-            <i data-lucide="${iconName}" class="w-4 h-4 text-amber-600"></i>
+          <div class="flex items-center gap-2 font-bold text-xs text-white">
+            <i data-lucide="${iconName}" class="w-4 h-4 text-amber-400"></i>
             <span>${item.title}</span>
           </div>
           <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${badgeClass}">
             ${item.severity}
           </span>
         </div>
-        <p class="text-xs text-slate-700 leading-relaxed">${item.explanation}</p>
-        <div class="text-[11px] bg-slate-50 p-2 rounded-lg border border-slate-100 text-slate-600 space-y-0.5">
-          <div class="font-semibold text-slate-700">Contradictory Evidence:</div>
+        <p class="text-xs text-slate-300 leading-relaxed">${item.explanation}</p>
+        <div class="text-[11px] bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-slate-400 space-y-0.5">
+          <div class="font-semibold text-slate-300">Contradictory Evidence:</div>
           ${item.conflicting_points.map(pt => `<div>• ${pt}</div>`).join('')}
         </div>
-        <div class="text-[11px] text-brand-700 font-medium flex items-start gap-1">
-          <i data-lucide="help-circle" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5"></i>
+        <div class="text-[11px] text-teal-300 font-medium flex items-start gap-1">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-teal-400"></i>
           <span><strong>Clarification Prompt:</strong> ${item.suggested_clarification}</span>
         </div>
       </div>
@@ -327,7 +327,7 @@ function renderLabTable() {
   if (filtered.length === 0) {
     labTableBody.innerHTML = `
       <tr>
-        <td colspan="6" class="py-8 text-center text-slate-400">
+        <td colspan="6" class="py-8 text-center text-slate-500">
           ${tests.length === 0 ? "No lab tests processed yet. Upload a report or load the demo case." : "No tests match active filter."}
         </td>
       </tr>
@@ -348,20 +348,20 @@ function renderLabTable() {
 
     const refString = (test.ref_range_low !== null || test.ref_range_high !== null)
       ? `${test.ref_range_low ?? '-'} – ${test.ref_range_high ?? '-'}`
-      : (test.raw_ref_range || '<span class="text-slate-400 italic">Not stated</span>');
+      : (test.raw_ref_range || '<span class="text-slate-500 italic">Not stated</span>');
 
     const valueDisplay = test.value !== null ? test.value : (test.value_text || '-');
 
     return `
-      <tr class="hover:bg-slate-50/80 transition group">
-        <td class="py-2.5 px-3 font-medium text-slate-900">
+      <tr class="hover:bg-slate-850/80 transition group border-b border-slate-850">
+        <td class="py-2.5 px-3 font-medium text-white">
           <div>${test.test_name}</div>
-          ${test.clinical_flag_note ? `<div class="text-[10px] text-slate-500 line-clamp-1">${test.clinical_flag_note}</div>` : ''}
+          ${test.clinical_flag_note ? `<div class="text-[10px] text-slate-400 line-clamp-1">${test.clinical_flag_note}</div>` : ''}
         </td>
-        <td class="py-2.5 px-3 font-semibold font-mono text-slate-800">
-          ${valueDisplay} <span class="text-[10px] text-slate-500 font-sans">${test.unit || ''}</span>
+        <td class="py-2.5 px-3 font-semibold font-mono text-teal-300">
+          ${valueDisplay} <span class="text-[10px] text-slate-400 font-sans">${test.unit || ''}</span>
         </td>
-        <td class="py-2.5 px-3 text-slate-600 font-mono text-[11px]">
+        <td class="py-2.5 px-3 text-slate-300 font-mono text-[11px]">
           ${refString}
         </td>
         <td class="py-2.5 px-3">
@@ -374,10 +374,10 @@ function renderLabTable() {
         </td>
         <td class="py-2.5 px-3 text-right action-col">
           <div class="inline-flex items-center gap-1">
-            <button onclick="openSnippetModal('${test.id}')" title="Inspect source text" class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+            <button onclick="openSnippetModal('${test.id}')" title="Inspect source text" class="p-1 rounded text-slate-400 hover:text-teal-300 hover:bg-slate-800">
               <i data-lucide="scan" class="w-3.5 h-3.5"></i>
             </button>
-            <button onclick="openEditModal('${test.id}')" title="Verify / Edit value" class="p-1 rounded text-slate-400 hover:text-brand-600 hover:bg-brand-50">
+            <button onclick="openEditModal('${test.id}')" title="Verify / Edit value" class="p-1 rounded text-slate-400 hover:text-teal-300 hover:bg-slate-800">
               <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -389,7 +389,7 @@ function renderLabTable() {
 
 function renderSummary() {
   if (!currentRecord.summary) {
-    summaryContent.innerHTML = `<p class="text-slate-400 italic">Summary will generate automatically once patient data and lab reports are submitted.</p>`;
+    summaryContent.innerHTML = `<p class="text-slate-500 italic">Summary will generate automatically once patient data and lab reports are submitted.</p>`;
     return;
   }
   if (window.marked) {
