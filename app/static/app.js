@@ -1,4 +1,4 @@
-// MedLens Frontend Application Logic (Dark Mode)
+// MedLens Frontend Application Logic (Eye-Comfort Dark Mode)
 
 let currentRecord = {
   patient: null,
@@ -65,7 +65,7 @@ function setupEventListeners() {
   document.getElementById("btn-load-sample").addEventListener("click", async () => {
     try {
       const btn = document.getElementById("btn-load-sample");
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Loading...`;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Loading...`;
       if (window.lucide) lucide.createIcons();
 
       const res = await fetch("/api/load-sample", { method: "POST" });
@@ -76,7 +76,7 @@ function setupEventListeners() {
       alert("Error loading sample data: " + err.message);
     } finally {
       const btn = document.getElementById("btn-load-sample");
-      btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i> <span>⚡ Load Demo Case</span>`;
+      btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5"></i> <span>⚡ Load Demo Case</span>`;
       if (window.lucide) lucide.createIcons();
     }
   });
@@ -162,9 +162,9 @@ function setupEventListeners() {
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       document.querySelectorAll(".filter-btn").forEach(b => {
-        b.className = "filter-btn px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700";
+        b.className = "filter-btn px-2.5 py-1 rounded-md bg-slate-800/90 border border-slate-700 text-slate-300 hover:bg-slate-700";
       });
-      e.target.className = "filter-btn px-2.5 py-1 rounded-md bg-teal-500 font-bold text-slate-950";
+      e.target.className = "filter-btn px-2.5 py-1 rounded-md bg-teal-600 font-semibold text-white";
       activeFilter = e.target.dataset.filter;
       renderLabTable();
     });
@@ -279,20 +279,20 @@ function renderInconsistencies() {
   conflictCountBadge.textContent = `${list.length} Discrepanc${list.length > 1 ? 'ies' : 'y'} Flagged`;
 
   conflictList.innerHTML = list.map(item => {
-    let badgeClass = "bg-amber-950/80 text-amber-300 border-amber-800";
+    let badgeClass = "bg-amber-950/70 text-amber-300 border-amber-800/80";
     let iconName = "alert-triangle";
     if (item.severity === "CRITICAL") {
-      badgeClass = "bg-rose-950/80 text-rose-300 border-rose-800";
+      badgeClass = "bg-rose-950/70 text-rose-300 border-rose-800/80";
       iconName = "shield-alert";
     } else if (item.severity === "INFO") {
-      badgeClass = "bg-blue-950/80 text-blue-300 border-blue-800";
+      badgeClass = "bg-blue-950/70 text-blue-300 border-blue-800/80";
       iconName = "info";
     }
 
     return `
-      <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm space-y-2">
+      <div class="bg-[#131d31] p-3.5 rounded-xl border border-slate-800 shadow-sm space-y-2">
         <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2 font-bold text-xs text-white">
+          <div class="flex items-center gap-2 font-bold text-xs text-slate-100">
             <i data-lucide="${iconName}" class="w-4 h-4 text-amber-400"></i>
             <span>${item.title}</span>
           </div>
@@ -301,13 +301,13 @@ function renderInconsistencies() {
           </span>
         </div>
         <p class="text-xs text-slate-300 leading-relaxed">${item.explanation}</p>
-        <div class="text-[11px] bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-slate-400 space-y-0.5">
+        <div class="text-[11px] bg-[#0a0f1d] p-2.5 rounded-lg border border-slate-800 text-slate-400 space-y-0.5">
           <div class="font-semibold text-slate-300">Contradictory Evidence:</div>
           ${item.conflicting_points.map(pt => `<div>• ${pt}</div>`).join('')}
         </div>
-        <div class="text-[11px] text-teal-300 font-medium flex items-start gap-1">
+        <div class="text-[11px] text-teal-300/90 font-medium flex items-start gap-1">
           <i data-lucide="help-circle" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-teal-400"></i>
-          <span><strong>Clarification Prompt:</strong> ${item.suggested_clarification}</span>
+          <span><strong class="text-teal-200">Clarification Prompt:</strong> ${item.suggested_clarification}</span>
         </div>
       </div>
     `;
@@ -353,8 +353,8 @@ function renderLabTable() {
     const valueDisplay = test.value !== null ? test.value : (test.value_text || '-');
 
     return `
-      <tr class="hover:bg-slate-850/80 transition group border-b border-slate-850">
-        <td class="py-2.5 px-3 font-medium text-white">
+      <tr class="hover:bg-slate-800/40 transition group border-b border-slate-800/60">
+        <td class="py-2.5 px-3 font-medium text-slate-100">
           <div>${test.test_name}</div>
           ${test.clinical_flag_note ? `<div class="text-[10px] text-slate-400 line-clamp-1">${test.clinical_flag_note}</div>` : ''}
         </td>
