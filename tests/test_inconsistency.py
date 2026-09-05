@@ -1,10 +1,8 @@
-import pytest
 from app.models.schemas import (
-    PatientIntake,
-    LabTestItem,
     BiomarkerStatus,
+    LabTestItem,
+    PatientIntake,
     SeverityLevel,
-    ProvenanceType,
 )
 from app.services.inconsistency_engine import detect_clinical_inconsistencies
 

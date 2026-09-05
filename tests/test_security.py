@@ -2,8 +2,8 @@
 Automated unit tests for MedLens security headers, input validation, and upload boundaries.
 """
 
-import pytest
 from fastapi.testclient import TestClient
+
 from app.main import app
 
 client = TestClient(app)

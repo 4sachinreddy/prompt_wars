@@ -1,9 +1,9 @@
 import re
-from typing import Optional, Tuple
+
 from app.models.schemas import BiomarkerStatus, LabTestItem
 
 
-def parse_reference_range(raw_range: Optional[str]) -> Tuple[Optional[float], Optional[float]]:
+def parse_reference_range(raw_range: str | None) -> tuple[float | None, float | None]:
     """
     Parses common reference range patterns from text without guessing standards.
     Examples:
@@ -49,11 +49,11 @@ def parse_reference_range(raw_range: Optional[str]) -> Tuple[Optional[float], Op
 
 
 def evaluate_biomarker_status(
-    value: Optional[float],
-    ref_low: Optional[float],
-    ref_high: Optional[float],
-    unit: Optional[str] = "",
-) -> Tuple[BiomarkerStatus, str]:
+    value: float | None,
+    ref_low: float | None,
+    ref_high: float | None,
+    unit: str | None = "",
+) -> tuple[BiomarkerStatus, str]:
     """
     Strict deterministic evaluation of lab test status against source-provided reference ranges.
     Rule: Never invent reference ranges. If no range is in source, mark UNKNOWN.

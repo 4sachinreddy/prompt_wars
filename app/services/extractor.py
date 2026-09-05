@@ -1,15 +1,14 @@
-import os
 import io
-import re
 import json
-from typing import List, Optional, Tuple
-from pypdf import PdfReader
+import os
+import re
+
 from pydantic import BaseModel, Field
+from pypdf import PdfReader
 
 from app.models.schemas import (
     LabTestItem,
     ProvenanceType,
-    BiomarkerStatus,
     ReportMetadata,
 )
 from app.services.range_evaluator import process_lab_item_ranges
@@ -17,20 +16,20 @@ from app.services.range_evaluator import process_lab_item_ranges
 
 class LLMExtractedItem(BaseModel):
     test_name: str = Field(description="Name of the test, e.g. Hemoglobin, Glucose, Creatinine")
-    value: Optional[float] = Field(None, description="Numeric result value")
-    value_text: Optional[str] = Field(None, description="Textual result if qualitative (e.g., Negative, Trace)")
-    unit: Optional[str] = Field(None, description="Unit of measurement, e.g. g/dL, mg/dL, %")
-    ref_range_low: Optional[float] = Field(None, description="Lower bound of reference range explicitly in document. Null if not stated.")
-    ref_range_high: Optional[float] = Field(None, description="Upper bound of reference range explicitly in document. Null if not stated.")
-    raw_ref_range: Optional[str] = Field(None, description="Raw reference range verbatim from source")
+    value: float | None = Field(None, description="Numeric result value")
+    value_text: str | None = Field(None, description="Textual result if qualitative (e.g., Negative, Trace)")
+    unit: str | None = Field(None, description="Unit of measurement, e.g. g/dL, mg/dL, %")
+    ref_range_low: float | None = Field(None, description="Lower bound of reference range explicitly in document. Null if not stated.")
+    ref_range_high: float | None = Field(None, description="Upper bound of reference range explicitly in document. Null if not stated.")
+    raw_ref_range: str | None = Field(None, description="Raw reference range verbatim from source")
     source_snippet: str = Field(description="Exact snippet or line from report containing this observation")
-    category: Optional[str] = Field(None, description="Panel name, e.g. Complete Blood Count, Metabolic Panel")
+    category: str | None = Field(None, description="Panel name, e.g. Complete Blood Count, Metabolic Panel")
 
 
 class LLMExtractedReport(BaseModel):
-    lab_name: Optional[str] = Field(None, description="Name of the medical laboratory or clinic")
-    collection_date: Optional[str] = Field(None, description="Date of specimen collection or report")
-    tests: List[LLMExtractedItem] = Field(default_factory=list)
+    lab_name: str | None = Field(None, description="Name of the medical laboratory or clinic")
+    collection_date: str | None = Field(None, description="Date of specimen collection or report")
+    tests: list[LLMExtractedItem] = Field(default_factory=list)
 
 
 def extract_text_from_pdf(file_bytes: bytes) -> str:
@@ -52,7 +51,7 @@ def rule_based_fallback_parser(raw_text: str) -> LLMExtractedReport:
     High-precision tabular regex parser for clinical lab reports.
     Serves as an offline fallback when GEMINI_API_KEY is not configured.
     """
-    tests: List[LLMExtractedItem] = []
+    tests: list[LLMExtractedItem] = []
     lines = raw_text.splitlines()
 
     lab_name = "Clinical Pathology Laboratory"
@@ -114,7 +113,7 @@ def rule_based_fallback_parser(raw_text: str) -> LLMExtractedReport:
                     continue
 
                 value = float(nums[0])
-                
+
                 # Check for unit
                 unit = None
                 unit_candidates = ["g/dL", "mg/dL", "mmol/L", "x10^3/uL", "x10^6/uL", "uL", "fL", "pg", "%", "U/L", "mIU/L", "mL/min/1.73m2"]
@@ -141,7 +140,7 @@ def rule_based_fallback_parser(raw_text: str) -> LLMExtractedReport:
                             raw_ref = f"{ref_low} - {ref_high}"
                     except ValueError:
                         pass
-                
+
                 # Look for < 200 or > 60
                 if not ref_low and not ref_high:
                     less_m = re.search(r"<\s*([0-9]+\.?[0-9]*)", line_clean)
@@ -228,7 +227,7 @@ def process_medical_report(
     filename: str,
     raw_content: bytes,
     content_type: str = "text/plain",
-) -> Tuple[ReportMetadata, List[LabTestItem]]:
+) -> tuple[ReportMetadata, list[LabTestItem]]:
     """
     Main pipeline entry for document ingestion.
     Extracts text, invokes Gemini or fallback parser, and evaluates deterministic ranges.
@@ -249,7 +248,7 @@ def process_medical_report(
     if gemini_key:
         try:
             extracted_report = extract_with_gemini(raw_text, gemini_key)
-        except Exception as e:
+        except Exception:
             # If API call fails or rate limited, gracefully fall back to local clinical parser
             extracted_report = rule_based_fallback_parser(raw_text)
     else:
@@ -263,7 +262,7 @@ def process_medical_report(
         raw_text=raw_text,
     )
 
-    items: List[LabTestItem] = []
+    items: list[LabTestItem] = []
     for item in extracted_report.tests:
         lab_item = LabTestItem(
             test_name=item.test_name,

@@ -1,22 +1,22 @@
-from typing import List
+
 from app.models.schemas import (
-    PatientIntake,
-    LabTestItem,
-    InconsistencyItem,
-    SeverityLevel,
     BiomarkerStatus,
+    InconsistencyItem,
+    LabTestItem,
+    PatientIntake,
+    SeverityLevel,
 )
 
 
 def detect_clinical_inconsistencies(
     patient: PatientIntake,
-    lab_tests: List[LabTestItem],
-) -> List[InconsistencyItem]:
+    lab_tests: list[LabTestItem],
+) -> list[InconsistencyItem]:
     """
     Identifies clinical conflicts and discrepancies between user-provided intake data
     (symptoms, pre-existing conditions, medications, allergies) and extracted laboratory findings.
     """
-    inconsistencies: List[InconsistencyItem] = []
+    inconsistencies: list[InconsistencyItem] = []
 
     # Helper to look up test by name
     tests_by_name = {t.test_name.lower(): t for t in lab_tests}

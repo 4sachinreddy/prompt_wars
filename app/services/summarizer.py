@@ -1,23 +1,23 @@
 import os
-from typing import List, Optional
+
 from app.models.schemas import (
-    PatientIntake,
-    LabTestItem,
-    InconsistencyItem,
     BiomarkerStatus,
+    InconsistencyItem,
+    LabTestItem,
+    PatientIntake,
 )
 
 
 def generate_deterministic_summary(
-    patient: Optional[PatientIntake],
-    lab_tests: List[LabTestItem],
-    inconsistencies: List[InconsistencyItem],
+    patient: PatientIntake | None,
+    lab_tests: list[LabTestItem],
+    inconsistencies: list[InconsistencyItem],
 ) -> str:
     """
     Generates a structured, non-diagnostic, patient-friendly clinical summary.
     Adheres strictly to Responsible AI safety guidelines (no diagnosis, no prescription).
     """
-    lines: List[str] = []
+    lines: list[str] = []
 
     # 1. Patient Profile Overview
     lines.append("### 📋 Patient Overview & Reported Intake")
@@ -88,9 +88,9 @@ def generate_deterministic_summary(
 
 
 def generate_ai_summary(
-    patient: Optional[PatientIntake],
-    lab_tests: List[LabTestItem],
-    inconsistencies: List[InconsistencyItem],
+    patient: PatientIntake | None,
+    lab_tests: list[LabTestItem],
+    inconsistencies: list[InconsistencyItem],
 ) -> str:
     """
     Generates summary via Gemini 2.5 Flash if available, with strict prompt constraints,

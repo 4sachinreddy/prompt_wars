@@ -7,15 +7,15 @@ and human-in-the-loop (HITL) verification workflows.
 """
 
 import os
-import io
 from pathlib import Path
-from typing import Optional, List, Dict, Any
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request, Response, status
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.exceptions import RequestValidationError
+from typing import Any
+
 from dotenv import load_dotenv
+from fastapi import FastAPI, File, HTTPException, Request, Response, UploadFile, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 # Load environment variables
 load_dotenv()
@@ -23,16 +23,13 @@ load_dotenv()
 from app.models.schemas import (
     ClinicalRecord,
     PatientIntake,
-    LabTestItem,
-    InconsistencyItem,
     ProvenanceType,
     VerifyItemRequest,
-    BiomarkerStatus,
 )
-from app.services.range_evaluator import process_lab_item_ranges
 from app.services.extractor import process_medical_report
 from app.services.inconsistency_engine import detect_clinical_inconsistencies
-from app.services.summarizer import generate_ai_summary, generate_deterministic_summary
+from app.services.range_evaluator import process_lab_item_ranges
+from app.services.summarizer import generate_ai_summary
 
 app = FastAPI(
     title="MedLens — AI-Powered Clinical Information Intelligence",
@@ -135,7 +132,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 @app.get("/health", tags=["System"])
-async def health_check() -> Dict[str, Any]:
+async def health_check() -> dict[str, Any]:
     """Cloud Run & system health check probe.
     
     Returns:
@@ -188,7 +185,7 @@ async def upload_medical_report(file: UploadFile = File(...)) -> ClinicalRecord:
     """
     global current_record
     content: bytes = await file.read()
-    
+
     if not content:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -213,7 +210,7 @@ async def upload_medical_report(file: UploadFile = File(...)) -> ClinicalRecord:
     current_record.reports.append(metadata)
 
     # Merge tests without duplicate entries
-    existing_names: Dict[str, int] = {t.test_name.lower(): idx for idx, t in enumerate(current_record.lab_tests)}
+    existing_names: dict[str, int] = {t.test_name.lower(): idx for idx, t in enumerate(current_record.lab_tests)}
     for test in new_tests:
         name_key: str = test.test_name.lower()
         if name_key in existing_names:
@@ -342,6 +339,6 @@ async def serve_dashboard() -> HTMLResponse:
     """
     index_file: Path = STATIC_DIR / "index.html"
     if index_file.exists():
-        with open(index_file, "r", encoding="utf-8") as f:
+        with open(index_file, encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     return HTMLResponse("<h1>MedLens API is running. UI is initializing...</h1>")
