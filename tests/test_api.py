@@ -1,3 +1,7 @@
+"""
+Comprehensive API integration tests for MedLens FastAPI application.
+"""
+
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -6,14 +10,25 @@ client = TestClient(app)
 
 
 def test_health_endpoint():
+    """Verify health probe endpoint returns 200 OK and service metadata."""
     response = client.get("/health")
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "healthy"
     assert data["service"] == "medlens"
+    assert data["version"] == "1.0.0"
+
+
+def test_serve_dashboard_ui():
+    """Verify root / serves HTML dashboard."""
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+    assert "MedLens" in response.text
 
 
 def test_patient_intake_flow():
+    """Verify patient intake submission and calculation."""
     payload = {
         "name": "Sarah Connor",
         "age": 42,
@@ -32,7 +47,23 @@ def test_patient_intake_flow():
     assert record["patient"]["provenance"] == "USER_PROVIDED"
 
 
+def test_upload_medical_report_valid_file():
+    """Verify uploading a valid laboratory text file populates clinical record."""
+    file_content = b"""
+    Metropolitan Hospital Laboratory
+    Hemoglobin 14.2 g/dL 13.5 - 17.5
+    Fasting Blood Glucose 158 mg/dL 70 - 99
+    """
+    files = {"file": ("patient_lab.txt", file_content, "text/plain")}
+    response = client.post("/api/upload-report", files=files)
+    assert response.status_code == 200
+    record = response.json()
+    assert len(record["reports"]) > 0
+    assert len(record["lab_tests"]) >= 2
+
+
 def test_load_sample_case_flow():
+    """Verify 1-click sample demo case loads full patient and lab data."""
     response = client.post("/api/load-sample")
     assert response.status_code == 200
     record = response.json()
@@ -44,6 +75,7 @@ def test_load_sample_case_flow():
 
 
 def test_human_in_the_loop_verification():
+    """Verify HITL verification updates observation to HUMAN_VERIFIED."""
     # 1. Load sample data
     client.post("/api/load-sample")
     rec = client.get("/api/record").json()
